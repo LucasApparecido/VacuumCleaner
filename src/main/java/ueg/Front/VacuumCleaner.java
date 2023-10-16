@@ -1,4 +1,4 @@
-package org.example.FrontEnd;
+package org.example.Front;
 
 public class VacuumCleaner {
 }
