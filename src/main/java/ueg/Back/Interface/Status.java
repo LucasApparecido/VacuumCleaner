@@ -1,4 +1,4 @@
-package org.example.BackEnd;
+package ueg.Back.Interface;
 
 public class Status {
 }

@@ -1,4 +1,4 @@
-package org.example.BackEnd;
+package ueg.Back.Cleaner;
 
 public class Cleaner {
 }
