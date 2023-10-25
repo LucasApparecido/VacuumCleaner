@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class Screen extends JFrame {
+public class Screen extends JFrame implements ScreenObserver{
 
     private static int WIDTH = 500;
     private static int HEIGHT = 400;
@@ -16,17 +16,22 @@ public class Screen extends JFrame {
     private JPanel main;
     private JPanel room;
 
-    private JPanel statusMovement;
-    private JPanel statusSpin;
-    private JPanel statusClean;
-    private JPanel statusPiss;
 
     private JPanel panel;
-    private JLabel[][] floorTiles;
 
     private JPanel groupSensor;
-    private ImageIcon sensorOn = new ImageIcon(getClass().getResource("/sensorOn.png"));
-    private ImageIcon sensorOff = new ImageIcon(getClass().getResource("/sensorOff.png"));
+
+    private Universal universal = Universal.getInstance();
+
+    private JPanel statusMovement = universal.getStatusMovement();
+
+    private JPanel statusSpin = universal.getStatusSpin();
+
+    private JPanel statusClean = universal.getStatusClean();
+
+    private JPanel statusPiss = universal.getStatusPiss();
+
+    private JLabel[][] floorTiles = universal.getFloorTiles();
 
     private Screen() {
         setTitle("Aspirador de pó");
@@ -57,7 +62,6 @@ public class Screen extends JFrame {
         room.setLayout(new GridLayout(5, 5));
         room.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        floorTiles = new JLabel[5][5];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 floorTiles[i][j] = new JLabel();
@@ -81,11 +85,6 @@ public class Screen extends JFrame {
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        statusMovement = createStatusPanel("Movimento", sensorOff);
-        statusSpin = createStatusPanel("Giro", sensorOff);
-        statusClean = createStatusPanel("Limpando", sensorOff);
-        statusPiss = createStatusPanel("Xixi", sensorOff);
-
         groupSensor = new JPanel();
         groupSensor.setLayout(new BorderLayout());
         groupSensor.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -108,27 +107,23 @@ public class Screen extends JFrame {
 
         main.setBackground(Color.WHITE);
 
+        universal.setStatusMovement(statusMovement);
+        universal.setStatusSpin(statusSpin);
+        universal.setStatusClean(statusClean);
+        universal.setStatusPiss(statusPiss);
+        universal.setFloorTiles(floorTiles);
+
         getContentPane().add(main);
     }
 
-    private JPanel createStatusPanel(String labelText, ImageIcon icon) {
-        JPanel statusPanel = new JPanel();
-        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.Y_AXIS));
-        statusPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        statusPanel.setBackground(Color.WHITE);
+    public void update() {
+        statusMovement = universal.getStatusMovement();
+        statusSpin = universal.getStatusSpin();
+        statusClean = universal.getStatusClean();
+        statusPiss = universal.getStatusPiss();
+        floorTiles = universal.getFloorTiles();
 
-        JLabel label = new JLabel(labelText);
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel imageLabel = new JLabel();
-        imageLabel.setIcon(icon);
-        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        statusPanel.add(Box.createVerticalGlue());
-        statusPanel.add(label);
-        statusPanel.add(imageLabel);
-        statusPanel.add(Box.createVerticalGlue());
-
-        return statusPanel;
+        revalidate();
+        repaint();
     }
 }
