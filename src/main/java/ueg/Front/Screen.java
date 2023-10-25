@@ -1,13 +1,15 @@
 package ueg.Front;
 
+import ueg.Back.Cleaner.Cat;
+import ueg.Back.UniversalBack;
+import ueg.Front.Image.Combine;
+import ueg.Front.Updates.ScreenObserver;
+import ueg.Front.Updates.UniversalFront;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
-public class Screen extends JFrame implements ScreenObserver{
+public class Screen extends JFrame implements ScreenObserver {
 
     private static int WIDTH = 500;
     private static int HEIGHT = 400;
@@ -21,17 +23,28 @@ public class Screen extends JFrame implements ScreenObserver{
 
     private JPanel groupSensor;
 
-    private Universal universal = Universal.getInstance();
+    private UniversalFront universalFront = UniversalFront.getInstance();
 
-    private JPanel statusMovement = universal.getStatusMovement();
+    private UniversalBack universalBack = UniversalBack.getInstance();
 
-    private JPanel statusSpin = universal.getStatusSpin();
+    private JPanel statusMovement = universalFront.getStatusMovement();
 
-    private JPanel statusClean = universal.getStatusClean();
+    private JPanel statusSpin = universalFront.getStatusSpin();
 
-    private JPanel statusPiss = universal.getStatusPiss();
+    private JPanel statusClean = universalFront.getStatusClean();
 
-    private JLabel[][] floorTiles = universal.getFloorTiles();
+    private JPanel statusPiss = universalFront.getStatusPiss();
+
+    private JLabel[][] floorTiles = universalFront.getFloorTiles();
+
+    private ImageIcon floorImage = universalFront.getFloorImage();
+
+    private ImageIcon vacuumRight = universalBack.getVacuumRight();
+
+    private Combine combine = new Combine();
+
+    private Cat cat = new Cat();
+
 
     private Screen() {
         setTitle("Aspirador de pó");
@@ -66,21 +79,13 @@ public class Screen extends JFrame implements ScreenObserver{
             for (int j = 0; j < 5; j++) {
                 floorTiles[i][j] = new JLabel();
                 floorTiles[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                floorTiles[i][j].setIcon(floorImage);
                 room.add(floorTiles[i][j]);
             }
         }
 
-        try {
-            BufferedImage floorImage = ImageIO.read(new File("src/main/resources/floor.png"));
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 5; j++) {
-                    ImageIcon icon = new ImageIcon(floorImage);
-                    floorTiles[i][j].setIcon(icon);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        floorTiles[0][0].setIcon(new ImageIcon(combine.getOverlayedImage(floorImage.getImage(), vacuumRight.getImage())));
+        cat.piss(floorTiles);
 
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -107,21 +112,21 @@ public class Screen extends JFrame implements ScreenObserver{
 
         main.setBackground(Color.WHITE);
 
-        universal.setStatusMovement(statusMovement);
-        universal.setStatusSpin(statusSpin);
-        universal.setStatusClean(statusClean);
-        universal.setStatusPiss(statusPiss);
-        universal.setFloorTiles(floorTiles);
+        universalFront.setStatusMovement(statusMovement);
+        universalFront.setStatusSpin(statusSpin);
+        universalFront.setStatusClean(statusClean);
+        universalFront.setStatusPiss(statusPiss);
+        universalFront.setFloorTiles(floorTiles);
 
         getContentPane().add(main);
     }
 
     public void update() {
-        statusMovement = universal.getStatusMovement();
-        statusSpin = universal.getStatusSpin();
-        statusClean = universal.getStatusClean();
-        statusPiss = universal.getStatusPiss();
-        floorTiles = universal.getFloorTiles();
+        statusMovement = universalFront.getStatusMovement();
+        statusSpin = universalFront.getStatusSpin();
+        statusClean = universalFront.getStatusClean();
+        statusPiss = universalFront.getStatusPiss();
+        floorTiles = universalFront.getFloorTiles();
 
         revalidate();
         repaint();
