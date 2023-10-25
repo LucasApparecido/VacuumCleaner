@@ -1,6 +1,6 @@
 package ueg.Front;
 
-import ueg.Back.Cleaner.Cat;
+import ueg.Back.Dirty.Cat;
 import ueg.Back.UniversalBack;
 import ueg.Front.Image.Combine;
 import ueg.Front.Updates.ScreenObserver;
@@ -29,7 +29,7 @@ public class Screen extends JFrame implements ScreenObserver {
 
     private JPanel statusMovement = universalFront.getStatusMovement();
 
-    private JPanel statusSpin = universalFront.getStatusSpin();
+    private JPanel statusSpin = universalFront.getStatusWall();
 
     private JPanel statusClean = universalFront.getStatusClean();
 
@@ -113,7 +113,7 @@ public class Screen extends JFrame implements ScreenObserver {
         main.setBackground(Color.WHITE);
 
         universalFront.setStatusMovement(statusMovement);
-        universalFront.setStatusSpin(statusSpin);
+        universalFront.setStatusWall(statusSpin);
         universalFront.setStatusClean(statusClean);
         universalFront.setStatusPiss(statusPiss);
         universalFront.setFloorTiles(floorTiles);
@@ -123,7 +123,7 @@ public class Screen extends JFrame implements ScreenObserver {
 
     public void update() {
         statusMovement = universalFront.getStatusMovement();
-        statusSpin = universalFront.getStatusSpin();
+        statusSpin = universalFront.getStatusWall();
         statusClean = universalFront.getStatusClean();
         statusPiss = universalFront.getStatusPiss();
         floorTiles = universalFront.getFloorTiles();

@@ -1,7 +1,6 @@
-package ueg.Back.Cleaner;
+package ueg.Back.Dirty;
 
 import ueg.Back.UniversalBack;
-import ueg.Front.Image.Combine;
 
 import javax.swing.*;
 import java.util.Random;
@@ -22,7 +21,7 @@ public class Cat {
             int line = randomValue.nextInt(5);
             int column = randomValue.nextInt(5);
             Boolean isDirty = universalBack.getDirtyFloor()[line][column];
-            if (!isDirty || !(line == 0 && column == 0)) {
+            if (!isDirty & !(line == 0 && column == 0)) {
                 room[line][column].setIcon(catPiss);
                 universalBack.setDirtyFloor(true, line, column);
             }

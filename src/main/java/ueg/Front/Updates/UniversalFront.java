@@ -11,7 +11,7 @@ public class UniversalFront {
 
     private JPanel statusMovement;
 
-    private JPanel statusSpin;
+    private JPanel statusWall;
 
     private JPanel statusClean;
 
@@ -30,9 +30,9 @@ public class UniversalFront {
 
     private UniversalFront() {
         statusMovement = createStatusPanel("Movimento", sensorOff);
-        statusSpin = createStatusPanel("Giro", sensorOff);
+        statusWall = createStatusPanel("Parede", sensorOff);
         statusClean = createStatusPanel("Limpeza", sensorOff);
-        statusPiss = createStatusPanel("Xixi", sensorOff);
+        statusPiss = createStatusPanel("Sujo", sensorOff);
     }
 
     public static UniversalFront getInstance() {
@@ -81,12 +81,12 @@ public class UniversalFront {
         notifyObservers();
     }
 
-    public JPanel getStatusSpin() {
-        return statusSpin;
+    public JPanel getStatusWall() {
+        return statusWall;
     }
 
-    public void setStatusSpin(JPanel statusSpin) {
-        this.statusSpin = statusSpin;
+    public void setStatusWall(JPanel statusSpin) {
+        this.statusWall = statusSpin;
         notifyObservers();
     }
 
@@ -128,6 +128,21 @@ public class UniversalFront {
 
     public ImageIcon getFloorImage() {
         return floorImage;
+    }
+
+    public void modifyImage(JPanel statusPanel, ImageIcon newImage) {
+        Component[] components = statusPanel.getComponents();
+
+        for (Component component : components) {
+            if (component instanceof JLabel) {
+                JLabel label = (JLabel) component;
+                if (label.getIcon() != null) {
+                    label.setIcon(newImage);
+                    notifyObservers();
+                    break;
+                }
+            }
+        }
     }
 }
 
